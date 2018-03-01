@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * Created by denis on 28.02.18.
  */
-public class User {
+public class User implements StructureModelsAllObject{
     private String fullName;
     private int idUser;
     private String pathToImg;
@@ -62,7 +62,8 @@ public class User {
         this.phone = phone;
     }
 
-    public JsonObject getUser(){
+    @Override
+    public JsonObject getJson(){
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("id_user", new JsonPrimitive(this.idUser));
         jsonObject.add("full_name", new JsonPrimitive(this.fullName));
@@ -71,7 +72,8 @@ public class User {
         return jsonObject;
     }
 
-    public Object[] getDataVartex(){
+    @Override
+    public Object[] getDataVertex(){
         Object objects[] = new Object[8];
         objects[0] = "full_name";
         objects[1] = this.fullName;

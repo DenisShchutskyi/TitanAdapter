@@ -1,3 +1,4 @@
+import Processing.UserProcessing;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import models.DefaultInitAdapter;
@@ -5,11 +6,10 @@ import models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.util.ArrayList;
 
-/**
- * Created by denis on 27.02.18.
- */
+
 
 public class TitanAdapter {
     private static final Logger LOGGER =
@@ -56,17 +56,18 @@ public class TitanAdapter {
                 24,
                 "/fsadassdfsdf",
                 "380979491075");
-        titanAdapter.setUser(user);
-        titanAdapter.setUser(user1);
+        //titanAdapter.setUser(user);
+        //titanAdapter.setUser(user1);
         /*titanAdapter.getUserById(21);
         System.out.println("______");
         titanAdapter.getUserById(22);
         System.out.println("______");
         */
-        titanAdapter.getUserById(23);
+        //titanAdapter.getUserById(23);
         System.out.println("______");
-        titanAdapter.getUserById(24);
-        //titanAdapter.getUsers();
+        //titanAdapter.getUserById(24);
+        titanAdapter.getUsers();
+        System.exit(0);
     }
 
 

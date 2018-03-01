@@ -1,3 +1,5 @@
+package Processing;
+
 import com.thinkaurelius.titan.core.PropertyKey;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.schema.TitanManagement;
@@ -13,35 +15,36 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
-/**
- * Created by denis on 28.02.18.
- */
-
 
 public class UserProcessing {
 
     private TitanGraph graph;
     private String nameVertex;
 
-    UserProcessing(TitanGraph graph){
+    public UserProcessing(TitanGraph graph){
         this.graph = graph;
-        MyProperty property = MyProperty.getInstance();
-        this.nameVertex = property.getValue("name_v_user");
+        this.nameVertex = MyProperty.getInstance().getValue("name_v_user");
     }
 
 
     public ArrayList<User> getUsers(){
         System.out.println("23");
         GraphTraversalSource g = graph.traversal();
-       /* ArrayList list = new ArrayList();
-        g.V().has("id_user", ra).fill(list);
-        for(Object o: list) System.out.println(o);
-        System.out.println(56);*/
+
+        ArrayList list = new ArrayList();
+        g.V().has("id_user").fill(list);
+        for(Object o: list){
+            Vertex curNode = (Vertex)o;
+            for(String key: curNode.keys()){
+                System.out.println(key +':' + curNode.value(key));
+            }
+        }
+        System.out.println(56);
         return null;
     }
 
     public void setUser(User user) {
-        Object objects[] = user.getDataVartex();
+        Object objects[] = user.getDataVertex();
         Vertex curVertex = graph.addVertex(nameVertex);
         for (int i = 0; i < objects.length; i += 2) {
             curVertex.property((String) objects[i], objects[i + 1]);
@@ -57,12 +60,26 @@ public class UserProcessing {
         mgmt.commit();
     }
 
-    public void getUserById(int idUser){
+    public User getUserById(int idUser){
         GraphTraversalSource g = graph.traversal();
-        Vertex fromNode = g.V().has("id_user", idUser).next();
-        for(String key: fromNode.keys()){
-            System.out.println(key +':' + fromNode.value(key));
-        }
+        User user = null;
+        try {
+            Vertex resNode = g.V().has("id_user", idUser).next();
+            user = new User(resNode.value("id_user"),
+                    resNode.value("full_name"),
+                    resNode.value("path_to_img"),
+                    resNode.value("phone"));
+        }catch (Exception ex){}
+        return user;
+    }
+
+    public Vertex getVertexUserById(int idUser){
+        GraphTraversalSource g = graph.traversal();
+        Vertex resNode = null;
+        try {
+            resNode = g.V().has("id_user", idUser).next();
+        }catch (Exception ex){}
+        return resNode;
     }
 
 }
