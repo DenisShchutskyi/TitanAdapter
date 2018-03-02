@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 
-public class UserProcessing {
+public class  UserProcessing {
 
     private TitanGraph graph;
     private String nameVertex;
@@ -28,9 +28,8 @@ public class UserProcessing {
 
 
     public ArrayList<User> getUsers(){
-        System.out.println("23");
+        //System.out.println("23");
         GraphTraversalSource g = graph.traversal();
-
         ArrayList list = new ArrayList();
         g.V().has("id_user").fill(list);
         for(Object o: list){
@@ -39,36 +38,36 @@ public class UserProcessing {
                 System.out.println(key +':' + curNode.value(key));
             }
         }
-        System.out.println(56);
+        //System.out.println(56);
         return null;
     }
 
-    public void setUser(User user) {
+    public Vertex setUser(User user) {
         Object objects[] = user.getDataVertex();
         Vertex curVertex = graph.addVertex(nameVertex);
+        //for(Object o: objects)
+        //    System.out.println(o.toString());
         for (int i = 0; i < objects.length; i += 2) {
             curVertex.property((String) objects[i], objects[i + 1]);
         }
-        TitanManagement mgmt = graph.openManagement();
-        TitanManagement.IndexBuilder indexBuilder = mgmt.buildIndex("byIdUser", Vertex.class);
-        if (!mgmt.containsGraphIndex("byIdUser")) {
-            PropertyKey indexPropertyKey = mgmt.getOrCreatePropertyKey("id_user");
-            indexBuilder.addKey(indexPropertyKey);
-            indexBuilder.unique().buildCompositeIndex();
-        }
-
-        mgmt.commit();
+        /*try {
+            TitanManagement mgmt = graph.openManagement();
+            TitanManagement.IndexBuilder indexBuilder = mgmt.buildIndex("byIdUser", Vertex.class);
+            if (!mgmt.containsGraphIndex("byIdUser")) {
+                PropertyKey indexPropertyKey = mgmt.getOrCreatePropertyKey("id_user");
+                indexBuilder.addKey(indexPropertyKey);
+                indexBuilder.unique().buildCompositeIndex();
+            }
+            mgmt.commit();
+        }catch (Exception e){e.printStackTrace();}*/
+        return curVertex;
     }
 
     public User getUserById(int idUser){
         GraphTraversalSource g = graph.traversal();
         User user = null;
         try {
-            Vertex resNode = g.V().has("id_user", idUser).next();
-            user = new User(resNode.value("id_user"),
-                    resNode.value("full_name"),
-                    resNode.value("path_to_img"),
-                    resNode.value("phone"));
+            user = new User(g.V().has("id_user", idUser).next());
         }catch (Exception ex){}
         return user;
     }

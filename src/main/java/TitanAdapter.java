@@ -1,10 +1,14 @@
+import Processing.ChatProcessing;
 import Processing.UserProcessing;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
+import models.Chat;
 import models.DefaultInitAdapter;
+import models.Message;
 import models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 
 import java.util.ArrayList;
@@ -19,10 +23,12 @@ public class TitanAdapter {
 
     private TitanGraph graph;
     private UserProcessing userProcessing;
+    private ChatProcessing chatProcessing;
 
     private TitanAdapter(String dataDir){
         this.graph = TitanFactory.open("berkeleyje:" + dataDir);
         this.userProcessing = new UserProcessing(this.graph);
+        this.chatProcessing = new ChatProcessing(this.graph);
     }
 
     public static TitanAdapter getInstance(DefaultInitAdapter defaultInitAdapter){
@@ -40,33 +46,29 @@ public class TitanAdapter {
         userProcessing.getUserById(idUser);
     }
 
-    public void setUser(User user){
-        userProcessing.setUser(user);
+    public Vertex setUser(User user){
+        return userProcessing.setUser(user);
+    }
+
+    public Vertex setChat(Chat chat){ return chatProcessing.setChat(chat);}
+
+    public void setUserToChat(Vertex chat, Vertex user){chatProcessing.setEdgeChatToUser(chat,user);}
+
+    public void getUsersChat(int idChat){chatProcessing.getUsersInChat(idChat);}
+
+    public void setMessageToChat(Message message){chatProcessing.setMessageToChat(message);}
+
+    public ArrayList<Message> getMessageChat(int page,
+                                             int idChat){
+        return chatProcessing.getMessagesChat(page, idChat);
     }
 
 
     public static void main(String[] args) {
         TitanAdapter titanAdapter = TitanAdapter
-                .getInstance(new DefaultInitAdapter("./test_data"));
-        User user = new User("Deniss",
-                23,
-                "/fsadassdfsdf",
-                "380979491075");
-        User user1 = new User("Deniss",
-                24,
-                "/fsadassdfsdf",
-                "380979491075");
-        //titanAdapter.setUser(user);
-        //titanAdapter.setUser(user1);
-        /*titanAdapter.getUserById(21);
-        System.out.println("______");
-        titanAdapter.getUserById(22);
-        System.out.println("______");
-        */
-        //titanAdapter.getUserById(23);
-        System.out.println("______");
-        //titanAdapter.getUserById(24);
-        titanAdapter.getUsers();
+                .getInstance(new DefaultInitAdapter("./data_"));
+
+        titanAdapter.getUsersChat(1);
         System.exit(0);
     }
 

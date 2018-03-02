@@ -2,6 +2,7 @@ package models;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 public class Message implements StructureModelsAllObject {
     private int idMessage;
@@ -22,6 +23,15 @@ public class Message implements StructureModelsAllObject {
         this.idChat = idChat;
         this.createdOn =  (System.currentTimeMillis() / 1000L);
         this.textMessage = textMessage;
+    }
+
+    public Message(Vertex vertexMessage){
+        this.idMessage = vertexMessage.value("id_message");
+        this.idTypeMessage = vertexMessage.value("id_type_message");
+        this.idSender = vertexMessage.value("id_sender");
+        this.idChat = vertexMessage.value("id_chat");
+        this.createdOn =  vertexMessage.value("id_created_on");
+        this.textMessage = vertexMessage.value("text_message");
     }
 
     public int getIdMessage() {
@@ -86,7 +96,7 @@ public class Message implements StructureModelsAllObject {
 
     @Override
     public Object[] getDataVertex() {
-        Object objects[] = new Object[10];
+        Object objects[] = new Object[12];
         objects[0] = "id_message";
         objects[1] = idMessage;
         objects[2] = "id_type_message";

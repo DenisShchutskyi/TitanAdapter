@@ -1,5 +1,6 @@
 package models;
 import com.google.gson.*;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import java.util.Objects;
 
@@ -17,6 +18,13 @@ public class User implements StructureModelsAllObject{
         this.idUser = idUser;
         this.pathToImg = pathToImg;
         this.phone = phone;
+    }
+
+    public User(Vertex vertexUser){
+        this.fullName = vertexUser.value("full_name");
+        this.idUser = vertexUser.value("id_user");
+        this.pathToImg = vertexUser.value("path_img");
+        this.phone = vertexUser.value("phone");
     }
 
 

@@ -2,6 +2,7 @@ package models;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.codehaus.groovy.transform.trait.Traits;
 
 public class Chat implements StructureModelsAllObject {
@@ -25,6 +26,15 @@ public class Chat implements StructureModelsAllObject {
         this.isMain = isMain;
         this.isChat = isChat;
         this.idCreator = idCreator;
+    }
+
+    public Chat(Vertex vertexChat){
+        this.idChat = vertexChat.value("id_chat");
+        this.titleChat = vertexChat.value("title_chat");
+        this.pathToImg = vertexChat.value("path_to_img");
+        this.isMain = vertexChat.value("is_main");
+        this.isChat = vertexChat.value("is_chat");
+        this.idCreator = vertexChat.value("id_creatoe");
     }
 
     public int getIdChat() {
